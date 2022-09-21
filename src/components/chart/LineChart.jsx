@@ -59,6 +59,21 @@ function LineChart(props) {
                                   padding: 50,
                               }
                           },
+                          legendCallback: function (chart) {
+                              // Return the HTML string here.
+                              console.log(chart.data.datasets);
+                              var text = [];
+                              text.push('<ul class="' + chart.id + '-legend">');
+                              for (var i = 0; i < chart.data.datasets[0].data.length; i++) {
+                                  text.push('<li><span id="legend-' + i + '-item" style="background-color:' + chart.data.datasets[0].backgroundColor[i] + '"   onclick="updateDataset(event, ' + '\'' + i + '\'' + ')">');
+                                  if (chart.data.labels[i]) {
+                                      text.push(chart.data.labels[i]);
+                                  }
+                                  text.push('</span></li>');
+                              }
+                              text.push('</ul>');
+                              return text.join("");
+                          },
                           tooltip: {
                               callbacks: {
                                   title: () => false, // Disable tooltip title
@@ -77,7 +92,7 @@ function LineChart(props) {
                           delay: (context) => {
                               let delay = 0;
                               if (context.type === 'data' && context.mode === 'default' && !delayed) {
-                                  delay = context.dataIndex * 500 + context.datasetIndex * 500;
+                                  delay = context.dataIndex * 100 + context.datasetIndex * 100;
                               }
                               return delay;
                           },
